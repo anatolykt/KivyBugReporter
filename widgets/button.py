@@ -20,16 +20,16 @@ Builder.load_string("""
 
 	canvas:
 		Color:
-			rgb: 0.6941176470588235, 0.15294117647058825, 0.8470588235294118, 1
+			rgb: self._current_background_color
 		RoundedRectangle:
 			pos: self.pos
 			size: self.size
-			radius: (15,)
+			radius: self._current_border_radius
 
 	Label:
 		text: root.text
 		bold: root.text_bold
-		color: root.text_color
+		color: root._current_text_color
 		italic: root.text_italic
 		markup: True
 		halign: root.text_halign
@@ -65,9 +65,9 @@ class BaseButton(ButtonBehavior, AnchorLayout):
 	disabled_background_color = ListProperty([0.5725490196078432,
 		0.16078431372549018, 0.6980392156862745, .5])
 
-	_current_text_color = ListProperty([])
-	_current_border_radius = ListProperty([])
-	_current_background_color = ListProperty([])
+	_current_text_color = ListProperty([0, 0, 0, 0])
+	_current_border_radius = ListProperty([0, 0, 0, 0])
+	_current_background_color = ListProperty([0, 0, 0, 0])
 
 	def __init__(self, **kwargs):
 		super(BaseButton, self).__init__(**kwargs)
@@ -78,7 +78,6 @@ class BaseButton(ButtonBehavior, AnchorLayout):
 		self.change_styles("disabled", self.disabled)
 
 	def on_pressed(self, instance, value):
-		print(value)
 		self.change_styles("pressed", value)
 
 	def on_disabled(self, instance, value):
@@ -128,5 +127,5 @@ class BasePressedButton(BaseButton):
 		return super(BasePressedButton, self).on_touch_up(touch)
 
 
-class CButton(BasePressedButton):
+class CMButton(BasePressedButton):
 	pass
