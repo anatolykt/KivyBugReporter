@@ -1,8 +1,11 @@
 from kivy.lang import Builder
+from kivy.clock import Clock
 from kivy.animation import Animation
+
 from kivy.properties import (ListProperty, 
 	ObjectProperty, StringProperty, 
 	BooleanProperty, NumericProperty)
+
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.anchorlayout import AnchorLayout
 
@@ -10,65 +13,75 @@ from kivy.uix.anchorlayout import AnchorLayout
 Builder.load_string("""
 <BaseButton>:
 	size_hint: None, None
+	size: self.size
+
 	anchor_x: "center"
 	anchor_y: "center"
 
 	canvas:
-		Clear
 		Color:
-			rgb: self._current_background_color
+			rgb: 0.6941176470588235, 0.15294117647058825, 0.8470588235294118, 1
 		RoundedRectangle:
 			pos: self.pos
 			size: self.size
-			raduis: self._current_border_radius
+			radius: (15,)
 
 	Label:
-		text: self.text
-		bold: self.bold
-		color: self.__current_text_color
-		italic: self.italic
+		text: root.text
+		bold: root.text_bold
+		color: root.text_color
+		italic: root.text_italic
 		markup: True
-		halign: "center"
-		valign: "middle"
-		padding: self.text_padding
-		font_name: self.font_family
-		font_size: self.font_size
+		halign: root.text_halign
+		valign: root.text_valign
+		padding: root.text_padding
+		font_size: root.text_font_size
 """)
 
 
 class BaseButton(ButtonBehavior, AnchorLayout):
-	text = StringProperty("")
-	bold = BooleanProperty(False)
-	italic = BooleanProperty(False)
-	font_size = NumericProperty(16)
-	font_family = StringProperty("")
-	text_padding = ListProperty([0, 0])
-
+	text = StringProperty("Hello World!")
+	text_bold = BooleanProperty(False)
 	text_color = ListProperty([0, 0, 0, 1])
-	border_radius = ListProperty([0, 0, 0, 0])
-	background_color = ListProperty([.5, .5, .5, 1])
+	text_italic = BooleanProperty(False)
+	text_halign = StringProperty("center")
+	text_valign = StringProperty("middle")
+	text_padding = ListProperty([15, 15])
+	text_font_size = NumericProperty(18)
+
+	border_radius = ListProperty([15, 15, 15, 15])
+	background_color = ListProperty([0.6941176470588235,
+		0.15294117647058825, 0.8470588235294118, 1])
 
 	pressed = BooleanProperty(False)
-	pressed_text_color = ListProperty([.3, .3, .3, 1])
-	pressed_border_radius = ListProperty([0, 0, 0, 0])
-	pressed_background_color = ListProperty([.7, .7, .7, 1])
+	pressed_text_color = ListProperty([.5, .5, .5, 1])
+	pressed_border_radius = ListProperty([15, 15, 15, 15])
+	pressed_background_color = ListProperty([0.5725490196078432,
+		0.16078431372549018, 0.6980392156862745, 1])
 
 	disabled = BooleanProperty(False)
-	disabled_text_color = ListProperty([.7, .7, .7, 1])
-	disabled_border_radius = ListProperty([0, 0, 0, 0])
-	disabled_background_color = ListProperty([.9, .9, .9, 1])
+	disabled_text_color = ListProperty([.5, .5, .5, .5])
+	disabled_border_radius = ListProperty([15, 15, 15, 15])
+	disabled_background_color = ListProperty([0.5725490196078432,
+		0.16078431372549018, 0.6980392156862745, .5])
 
-	_current_text_color = ListProperty([0, 0, 0, 0])
-	_current_border_radius = ListProperty([0, 0, 0, 0])
-	_current_background_color = ListProperty([0, 0, 0, 0])
+	_current_text_color = ListProperty([])
+	_current_border_radius = ListProperty([])
+	_current_background_color = ListProperty([])
 
 	def __init__(self, **kwargs):
 		super(BaseButton, self).__init__(**kwargs)
+		Clock.schedule_once(self.initialize_color_palette)
 
-	def on_pressed(self, value):
+	def initialize_color_palette(self, *args):
+		self.change_styles("pressed", self.pressed)
+		self.change_styles("disabled", self.disabled)
+
+	def on_pressed(self, instance, value):
+		print(value)
 		self.change_styles("pressed", value)
 
-	def on_disabled(self, value):
+	def on_disabled(self, instance, value):
 		self.change_styles("disabled", value)
 
 	def change_styles(self, key, value):
@@ -96,10 +109,24 @@ class BasePressedButton(BaseButton):
 	def __init__(self, **kwargs):
 		super(BasePressedButton, self).__init__(**kwargs)
 
-	def on_press(self):
-		if callable(self.on_press_callback):
-			self.on_press_callback()
+	def on_touch_down(self, touch):
+		if touch.is_mouse_scrolling or\
+		not self.collide_point(*touch.pos) or\
+		self in touch.ud or self.disabled:
+			return False
+		else:
+			self.pressed = True
+			if callable(self.on_press_callback):
+				self.on_press_callback()
+		return super(BasePressedButton, self).on_touch_down(touch)
 
-	def on_release(self):
-		if callable(self.on_release_callback):
-			self.on_release_callback()
+	def on_touch_up(self, touch):
+		if touch.grab_current is self:
+			self.pressed = False
+			if callable(self.on_release_callback):
+				self.on_release_callback()
+		return super(BasePressedButton, self).on_touch_up(touch)
+
+
+class CButton(BasePressedButton):
+	pass

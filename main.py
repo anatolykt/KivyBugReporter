@@ -21,7 +21,7 @@ if __name__ == "__main__":
 		"iPhone X": {
 			"width": 375,
 			"height": 812
-		}
+		},
 		"iPhone 6": {
 			"width": 375,
 			"height": 667
@@ -41,11 +41,11 @@ if __name__ == "__main__":
 		"iPad Pro (9.7-inch)": {
 			"width": 768,
 			"height": 1024
-		}
+		},
 		"iPad Pro (12.9-inch)": {
 			"width": 1024,
 			"height": 1366
-		},
+		}
 	}
 
 	# Append devices with the similar screen sizes.
@@ -111,7 +111,7 @@ if __name__ == "__main__":
 	DEFAULT_ERROR_LOG_FILE = "error.log"
 	DEFAULT_ERROR_LOG_PATH = "./"
 
- 	ERROR_LOG = None
+	ERROR_LOG = None
 
 	if ERROR_LOG_ABS:
 		ERROR_LOG = ERROR_LOG_ABS
