@@ -17,12 +17,12 @@ Builder.load_string("""
 		size: root.width * .5, root.height * .8
 		pos_hint: {"center_x": .5, "center_y": .5}
 
-		canvas.before:
-			Color:
-				rgb: 1, 0, 0, .3
-			Rectangle:
-				pos: self.pos
-				size: self.size		
+		# canvas.before:
+		# 	Color:
+		# 		rgb: 1, 0, 0, .3
+		# 	Rectangle:
+		# 		pos: self.pos
+		# 		size: self.size		
 """)
 
 
