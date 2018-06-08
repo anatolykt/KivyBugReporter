@@ -12,10 +12,17 @@ Builder.load_string("""
 		Rectangle:
 			pos: root.pos
 			size: root.size
-			
+
 	Robot:
-		size: root.width * .5, root.height * .5
-		pos_hint: {"center_x": .5, "top": 1}
+		size: root.width * .5, root.height * .8
+		pos_hint: {"center_x": .5, "center_y": .5}
+
+		canvas.before:
+			Color:
+				rgb: 1, 0, 0, .3
+			Rectangle:
+				pos: self.pos
+				size: self.size		
 """)
 
 
