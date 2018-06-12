@@ -1,6 +1,5 @@
 from kivy.lang import Builder
 from kivy.clock import Clock
-from kivy.animation import Animation
 
 from kivy.properties import (ListProperty, 
 	ObjectProperty, StringProperty, 
