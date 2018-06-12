@@ -2,7 +2,6 @@ from math import sin, cos, atan, floor
 
 from kivy.lang import Builder
 from kivy.clock import Clock
-from kivy.animation import Animation
 from kivy.core.window import Window
 
 from kivy.properties import (ListProperty, 
@@ -120,9 +119,9 @@ class BaseEye(ButtonBehavior, FloatLayout):
 		# Ranges of vertical and 
 		# horizontal shift of pupil
 		range_of_vertical_shift = abs(
-			self._sclera_size[1] - self._pupil_size[1]) / 5
+			self._sclera_size[1] - self._pupil_size[1]) / 6
 		range_of_horizontal_shift = abs(
-			self._sclera_size[0] - self._pupil_size[0]) / 5
+			self._sclera_size[0] - self._pupil_size[0]) / 6
 
 		# Maximum and minimum vertical
 		# and horizontal shift of pupil
@@ -151,9 +150,6 @@ class BaseEye(ButtonBehavior, FloatLayout):
 		pupil_center_y = eye_center_y - self._pupil_size[1] / 2
 		self._pupil_pos = (pupil_center_x, pupil_center_y)
 		return super(BaseEye, self).on_touch_up(touch)
-
-	def on__pupil_pos(self, *args):
-		print(args)
 
 	def calculate_size(self, hint):
 		width = self.width * hint
