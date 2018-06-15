@@ -5,59 +5,70 @@ from kivy.uix.floatlayout import FloatLayout
 
 Builder.load_string("""
 <Card>:
-	canvas:
+	canvas.before:
 		Color:
-			rgb: self.card_color
+			rgb: self.card_background_color
 		RoundedRectangle:
 			pos: self.pos
 			size: self.size
-			radius: self.card_radius
+			radius: self.card_border_radius
 
 	BoxLayout:
 		orientation: "vertical"
 		padding: 10, 10
-
 		pos_hint: {"center_x": .5, "center_y": .5}
 
 		Label:
 			text: root.header_text
-			color: root.header_color
-			size_hint: 1, .15
+			color: root.header_text_color
+			padding: root.header_padding
+			size_hint_y: None
+			height: self.texture_size[1]
+			halign: "center"
 
 		Label:
 			text: root.subheader_text
-			color: root.subheader_color
-			size_hint: 1, .15
+			color: root.subheader_text_color
+			padding: root.subheader_padding
+			size_hint_y: None
+			height: self.texture_size[1]
+			halign: "center"
 
-		TextInput:
-			size_hint: 1, .7
+		BoxLayout:
+			canvas.before:
+				Color:
+					rgb: root.textinput_background_color
+				RoundedRectangle:
+					pos: self.pos
+					size: self.size
+					radius: root.textinput_border_radius
 
-			text: root.content_text
-			color: root.content_color
-			background_color: 
-				root.content_background
+			orientation: "horizontal"
+			padding: 10, 10
 
-			scroll_y: 0
-			multiline: True
-			allow_copy: True
-			auto_indent: True
+			TextInput:
+				text: root.textinput_text
+				color: root.textinput_text_color
+				background_color: root.textinput_background_color
 """)
 
 
 class Card(FloatLayout):
-	card_color = ListProperty([0.9372549019607843, 
-		0.9450980392156862, 0.9490196078431372, 1])
-	card_radius = ListProperty([15, 15, 15, 15])
+	card_border_radius = ListProperty([15, 15])
+	card_background_color = ListProperty([.937, .945, .949, 1])
 
-	header_text = StringProperty("Header text")
-	header_color = ListProperty([0, 0, 0, 1])
+	header_text = StringProperty("Card Header")
+	header_padding = ListProperty([0, 5])
+	header_text_color = ListProperty([0, 0, 0, 1])
 
-	subheader_text = StringProperty("Subheader text")
-	subheader_color = ListProperty([0, 0, 0, .5])
+	subheader_text = StringProperty("Card Subheader")
+	subheader_padding = ListProperty([0, 15])
+	subheader_text_color = ListProperty([0, 0, 0, .5])
 
-	content_text = StringProperty("Hello World!!!\n" * 100)
-	content_color = ListProperty([0, 0, 0, 1])
-	content_background = ListProperty([255, 255, 255, 1])
+	textinput_text = StringProperty(" Error Traceback... " * 50)
+	textinput_text_color = ListProperty([0, 0, 0, 1])
+	textinput_border_radius = ListProperty([15, 15])
+	textinput_background_color = ListProperty([255, 255, 255, 1])
 
 	def __init__(self, **kwargs):
 		super(Card, self).__init__(**kwargs)
