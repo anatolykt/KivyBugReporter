@@ -14,6 +14,7 @@ Builder.load_string("""
 		id: dialogue_text
 		text: root.text[0]
 		color: root.text_color
+		font_size: root.text_font_size
 		padding: 10, 10
 		halign: "center"
 		size_hint_y: None
@@ -37,6 +38,7 @@ class Dialogue(FloatLayout):
 	text = ListProperty(["Hello World", 
 		"Привет мир", "Saluton mondo", "Hallo Welt"])
 	text_color = ListProperty([0, 0, 0, 1])
+	text_font_size = NumericProperty(38)
 	text_change_interval = NumericProperty(5)
 
 	def __init__(self, **kwargs):
