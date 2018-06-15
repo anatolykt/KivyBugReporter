@@ -4,6 +4,7 @@ from kivy.uix.floatlayout import FloatLayout
 from widgets.card import Card
 from widgets.robot import Eye
 from widgets.button import CMButton
+from widgets.dialogue import Dialogue
 
 Builder.load_string("""
 <BugReporter>:
@@ -14,8 +15,9 @@ Builder.load_string("""
 			pos: root.pos
 			size: root.size
 
-	Card:
-		size_hint: .9, .5
+	Dialogue:
+		_width: self.width / 4
+		_height: self.height / 5
 		pos_hint: {"center_x": .5, "center_y": .5}
 """)
 
